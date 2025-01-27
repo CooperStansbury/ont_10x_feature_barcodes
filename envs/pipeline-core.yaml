@@ -1,0 +1,12 @@
+name: pipeline-core
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - scanpy 
+  - anndata
+  - minimap2
+  - pysam
+  - samtools
+  - seqkit 
