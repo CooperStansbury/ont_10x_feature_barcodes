@@ -6,7 +6,10 @@ channels:
 dependencies:
   - scanpy 
   - anndata
-  - minimap2
+  - bwa
+  - nanoplexer
   - pysam
   - samtools
   - seqkit 
+  - numpy<2.0  
+  - flexiplex

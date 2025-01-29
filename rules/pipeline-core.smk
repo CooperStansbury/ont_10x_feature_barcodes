@@ -1,158 +1,63 @@
-rule gather_and_filter_hash_reads:
+checkpoint demux_reads:
+    """demultiplex reads based on hash sequences using nanoplexer"""
     input:
-        config['hashing_read_dir'] + "{sample_id}.fastq.gz",
+         fasta=OUTPUT_PATH + "reference/hash_sequences.fasta",
+         fastq=OUTPUT_PATH + "fastq/{sid}.fastq" + extension,
     output:
-        OUTPUT + "hash_fastq/{sample_id}.fastq.gz",
+         report=OUTPUT_PATH + "reports/nanoplexer/{sid}_hashing_report.txt",
+         dir=directory(OUTPUT_PATH + "hashed_reads/{sid}/")
     conda:
-        "seqkit"
+        "../envs/pipeline-core.yaml"
     params:
-        minlen=100,
-        maxlen=250,
-    shell:
-        "seqkit seq -M {params.maxlen} -m {params.minlen} {input} > {output}"
-
-
-rule get_hashing_seqs:
-    input:
-        config['hash_sequences'],
-    output:
-        OUTPUT + "hash_reference/hash.fasta",
-    shell:
-        """cp {input} {output}"""
-
-
-rule get_whitelist:
-    input:
-        config['barcode_whitelist'],
-    output:
-        OUTPUT + "hash_reference/barcode_whitelist.txt",
-    shell:
-        """cp {input} {output}"""
-
-
-rule get_translation:
-    input:
-        config['barcode_translation'],
-    output:
-        OUTPUT + "hash_reference/barcode_translation.txt",
-    shell:
-        """cp {input} {output}"""
-
-
-
-rule phase_reads:
-    input:
-        fasta=OUTPUT + "hash_reference/hash.fasta",
-        fastq=expand(OUTPUT + "hash_fastq/{sid}.fastq.gz", sid=hash_samples),
-    output:
-        log=OUTPUT + "reports/nanoplexer/hashing_report.txt",
-    conda:
-        "nanoplexer"
-    params:
-        indir=OUTPUT + "hash_fastq/",
-        outdir=OUTPUT + "hashed_reads/",
+        minlen=config['hashing']['min_length'],
+        maxlen=config['hashing']['max_length'],
+        nanoplexer_args=config['hashing']['nanoplexer_args']
+    wildcard_constraints:
+        sid="|".join(samples)
     threads:
-        36
+         config['threads']
+    shell:
+        """seqkit seq -M {params.maxlen} -m {params.minlen} {input.fastq} | nanoplexer \
+         -b {input.fasta} -t {threads} {params.nanoplexer_args} -p {output.dir} -l {output.report} - """
+
+
+rule find_barcodes:
+    """Extract reads containing known barcodes from a FASTQ file using flexiplex."""
+    input:
+        report=OUTPUT_PATH + "reports/nanoplexer/{sid}_hashing_report.txt",
+        barcodes=OUTPUT_PATH + "whitelist/detected_translated_barcodes.txt",
+    output:
+        flag=touch(OUTPUT_PATH + "flexiplex/{sid}_{fbc}.done"),
+        fastq=OUTPUT_PATH + "flexiplex/{sid}_{fbc}.fastq",
+        report=OUTPUT_PATH + "flexiplex/{sid}_{fbc}_reads_barcodes.txt",
+    conda:
+        "../envs/pipeline-core.yaml"
+    params:
+        args=config['hashing']['flexiplex_args'],
+        prefix=OUTPUT_PATH + "flexiplex/{sid}_{fbc}",
+        fastq=OUTPUT_PATH + "hashed_reads/{sid}/{fbc}.fastq",
+    threads:
+         config['threads']
     wildcard_constraints:
-        sample_id='|'.join([re.escape(x) for x in set(hash_samples)]),
+        sid="|".join(samples)
     shell:
-        """cat {params.indir}*fastq.gz | nanoplexer \
-        -b {input.fasta} -t {threads} -p {params.outdir} -l {output.log} - """
+        """ flexiplex -p {threads} -n {params.prefix} {params.args} -k {input.barcodes} {params.fastq} > {output.fastq} """
 
 
-rule get_detected_barcode_fasta:
+rule compile_feature_barcodes:
+    """
+    Load and integrate and the flexiplex output for fbc resolution
+    """
     input:
-        OUTPUT + 'scanpy/raw.anndata.h5ad',
+        whitelist=OUTPUT_PATH + "whitelist/detected_barcodes_translation.txt",
+        flex=expand(OUTPUT_PATH + "flexiplex/{sid}_{fbc}_reads_barcodes.txt", sid=samples, fbc=seqs)
     output:
-        OUTPUT + "hash_reference/detected_barcodes.fasta"
+        OUTPUT_PATH + "feature_barcodes/feature_barcodes.csv",
     conda:
-        'scanpy'
-    shell:
-        """python scripts/get_detected_barcodes.py {input} {output}"""
-
-
-rule get_barcode_translation:
-    input:
-        barcodes=OUTPUT + "hash_reference/detected_barcodes.fasta",
-        trans=OUTPUT + "hash_reference/barcode_translation.txt",
-    output:
-        mapping=OUTPUT + "hash_reference/barcode_mapping.csv",
-        fasta=OUTPUT + "hash_reference/translated_barcodes.fasta",
-    conda:
-        'bioinf'
-    shell:
-        """python scripts/get_barcode_translation.py {input.barcodes} \
-        {input.trans} {output.mapping} {output.fasta}"""
-
-
-rule index_barcodes:
-    input:
-        OUTPUT + "hash_reference/translated_barcodes.fasta",
-    output:
-        OUTPUT + "hash_reference/translated_barcodes.fasta.amb",
-        OUTPUT + "hash_reference/translated_barcodes.fasta.ann",
-        OUTPUT + "hash_reference/translated_barcodes.fasta.bwt",
-        OUTPUT + "hash_reference/translated_barcodes.fasta.pac",
-        OUTPUT + "hash_reference/translated_barcodes.fasta.sa",
-    conda:
-        "aligner"
-    shell:
-        """bwa index {input}"""
-
-
-# get a list of the hash sequences identified
-tag_list = [os.path.basename(x).replace('.fastq', '') for x in glob.glob(OUTPUT + "hashed_reads/" + "*.fastq")]
-tag_list = [x for x in tag_list if not x  == 'unclassified']
-wildcard_string = "|".join(tag_list)
-
-
-rule align_hash_to_barcodes:
-   input:
-       ref=OUTPUT + "hash_reference/translated_barcodes.fasta",
-       fastq=OUTPUT + "hashed_reads/{phase}.fastq",
-   output:
-       OUTPUT + "hash_alignment/{phase}.bam"
-   conda:
-       "aligner"
-   threads:
-       24
-   params:
-       min_seed=15,
-       bandwidth=100,
-       gap_open=6,
-       gap_extension=2,
-       clipping=5,
-       min_score=1,
-   wildcard_constraints:
-       phase=wildcard_string,
-   shell:
-       """bwa mem -k {params.min_seed} -w {params.bandwidth} \
-       -O {params.gap_open} -E {params.gap_extension} \
-       -L {params.clipping} -T {params.min_score} \
-       -t {threads} {input.ref} {input.fastq} | samtools view -Sb -> {output} """
-
-
-rule reads_per_barcode:
-    input:
-        OUTPUT + "hash_alignment/{phase}.bam"
-    output:
-        OUTPUT + "reports/hash_count/{phase}.csv"
+        "../envs/pipeline-core.yaml"
     wildcard_constraints:
-        phase=wildcard_string,
-    conda:
-        "bioinf"
+        sid="|".join(samples),
+        fbc="|".join(seqs),
     shell:
-        """python scripts/reads_per_barcode.py {input} {output}"""
-
-
-rule build_hashmap:
-    input:
-        expand(OUTPUT + "reports/hash_count/{sid}.csv", sid=tag_list),
-    output:
-        hashmap=OUTPUT + "reports/hash_map/hashmap.csv",
-        report=OUTPUT + "reports/hash_map/hashmap_summary.txt",
-    conda:
-        "bioinf"
-    shell:
-        """python scripts/build_hashmap.py {output.hashmap} {input} > {output.report}"""
-      
+        """ python scripts/build_feature_barcode_map.py {input.whitelist} {output} {input.flex} """
+    

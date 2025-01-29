@@ -1,13 +1,20 @@
-# general 
+# general
 threads: 36
-output_path: "/scratch/indikar_root/indikar1/shared_data/fb_test/"
+output_path: "/scratch/indikar_root/indikar1/shared_data/fbc_test/"
 
 # input files
 inputs:
-    fastq_directory: "/nfs/turbo/umms-indikar/shared/projects/hybrid_reprogramming/data/fastq/biolegend_library/2025_01_23_Hybrid_TSB_Run1_L2"
-    barcode_whitelist: "/nfs/turbo/umms-indikar/shared/projects/cell_cycle/data/10x_barcode_lists/3M-3pgex-may-2023.txt"
+    fastq_file_paths: "config/fastq_paths.txt"
+    inputs_are_directories: true
+    gzipped: true
+    barcode_translation: "/nfs/turbo/umms-indikar/shared/projects/cell_cycle/data/10x_barcode_lists/3M-3pgex-may-2023_translation.txt"
+    detected_barcodes: "/scratch/indikar_root/indikar1/shared_data/pipeline_test/whitelist/detected_barcodes.txt"
+    hash_sequences: 'config/hash_sequences.fasta'
 
-# read-length trimming
-trim:
+# biolengend hashing params
+hashing:
+    expected_cells: 10000
     min_length: 100
     max_length: 250
+    nanoplexer_args: "-L 150 -m 2 -x 2 -o 3 -e 1"
+    flexiplex_args: " -x '' -b ???????????????? -u '' -x '' "
