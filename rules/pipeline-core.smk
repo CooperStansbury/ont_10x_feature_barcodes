@@ -60,4 +60,18 @@ rule compile_feature_barcodes:
         fbc="|".join(seqs),
     shell:
         """ python scripts/build_feature_barcode_map.py {input.whitelist} {output} {input.flex} """
+
+rule agg_feature_barcodes:
+    """ 
+    Aggregate over all detected feature barcodes and assign the one with the largest 
+    number of reads 
+    """
+    input:
+        OUTPUT_PATH + "feature_barcodes/feature_barcodes.csv",
+    output:
+        OUTPUT_PATH + "feature_barcodes/fbc_map.csv",
+    conda:
+        "../envs/pipeline-core.yaml"
+    shell:
+        """ python scripts/agg_feature_barcodes.py {input} {output} """
     

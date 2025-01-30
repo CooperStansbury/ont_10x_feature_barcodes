@@ -90,6 +90,7 @@ rule all:
         expand(OUTPUT_PATH + "reports/nanoplexer/{sid}_hashing_report.txt", sid=samples),
         expand(OUTPUT_PATH + "flexiplex/{sid}_{fbc}.fastq",  sid=samples, fbc=seqs),
         OUTPUT_PATH + "feature_barcodes/feature_barcodes.csv",
+        OUTPUT_PATH + "feature_barcodes/fbc_map.csv",
     wildcard_constraints:
         sid="|".join(samples),
         fbc="|".join(seqs),

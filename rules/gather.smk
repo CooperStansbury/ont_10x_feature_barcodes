@@ -85,7 +85,6 @@ rule get_translation:
         """cp {input} {output}"""
 
 
-
 rule get_detected_barcodes:
     """Copy barcode translation file from the configuration file to the output directory."""
     input:
@@ -94,7 +93,6 @@ rule get_detected_barcodes:
         OUTPUT_PATH + "whitelist/detected_barcodes.txt",
     shell:
         """cp {input} {output}"""
-
 
 
 rule extract_barcodes:
@@ -146,22 +144,4 @@ checkpoint get_seq_names:
     shell:
         """
         grep '>' {input} | sed 's/>//' > {output.seqs}
-        """
-
-
-rule make_barcode_fasta:
-    """
-    Generate a FASTA file from a barcode translation table.
-
-    This rule takes a text file with barcode IDs and sequences as input
-    and creates a FASTA file where each barcode sequence is represented
-    as a separate entry.
-    """
-    input:
-        OUTPUT_PATH + "whitelist/barcode_translation.txt"
-    output:
-        OUTPUT_PATH + 'reference/barcodes.fasta'
-    shell:
-        """
-        awk '{{print ">"$1":"$2"\\n"$2}}' {input} > {output}
         """
