@@ -35,3 +35,18 @@ The following configuration files are included:
 - **`flexiplex_args`**: Command-line arguments for the Flexiplex tool (`"-e 2 -x '' -b ???????????????? -u '' -x ''"`).
 
 This configuration file ensures that the pipeline runs efficiently with appropriate resource allocation and input parameters. Modify these settings as needed to adapt the workflow to different datasets and computing environments.
+
+## SLURM Configuration
+
+To run the pipeline on a SLURM-managed cluster, you need the following configuration files:
+
+### `cluster.json`
+Defines job-specific parameters for each sub-job in the workflow, including:
+- **Logging directory** – Path for storing job logs  
+- **SLURM user account** – The user account under which jobs will run  
+- **SLURM billing account** – The account used for job billing  
+
+### `cluster/config.yaml`
+Specifies the default SLURM submission parameters for sub-jobs. This file typically does not require modification.
+
+Ensure both files are correctly configured before executing the workflow.
