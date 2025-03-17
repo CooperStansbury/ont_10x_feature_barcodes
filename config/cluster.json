@@ -1,17 +1,17 @@
 {
     "__default__": {
-    "account_slurm": "<ACCOUNT>",
-    "partition": "<PARTITION",
+    "account_slurm": "indikar99",
+    "partition": "standard",
     "jobname": "{rule}.{wildcards}",
     "nodes": 1,
     "ntasks" : 1,
-    "cpus": 16,
-    "mem": "10G",
+    "cpus": 8,
+    "mem": "50G",
     "walltime": "36:00:00",
-    "email": "<EMAIL>",
+    "email": "cstansbu@umich.edu",
     "mailon": "a",
     "mail_type": "FAIL",
     "jobout": "oe",
-    "outfile": "<LOG_DIR>"
+    "outfile": "/scratch/indikar_root/indikar1/shared_data/runlogs/{rule}.{wildcards}.out"
     }
 }

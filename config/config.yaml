@@ -1,14 +1,14 @@
 # general
 threads: 36
-output_path: "/scratch/indikar_root/indikar1/shared_data/fbc_test/"
+output_path: "/scratch/indikar_root/indikar1/shared_data/library_2_tsb_strict/"
 
 # input files
 inputs:
     fastq_file_paths: "config/fastq_paths.txt"
-    inputs_are_directories: true
+    inputs_are_directories: false
     gzipped: true
     barcode_translation: "/nfs/turbo/umms-indikar/shared/projects/cell_cycle/data/10x_barcode_lists/3M-3pgex-may-2023_translation.txt"
-    detected_barcodes: "/scratch/indikar_root/indikar1/shared_data/pipeline_test/whitelist/detected_barcodes.txt"
+    detected_barcodes: "/scratch/indikar_root/indikar1/shared_data/lib2_02262025/whitelist/detected_barcodes.txt"
     hash_sequences: 'config/hash_sequences.fasta'
 
 # biolengend hashing params
@@ -16,5 +16,5 @@ hashing:
     expected_cells: 10000
     min_length: 100
     max_length: 250
-    nanoplexer_args: "-L 150 -m 2 -x 2 -o 3 -e 1"
-    flexiplex_args: " -e 2 -x '' -b ???????????????? -u '' -x '' "
+    nanoplexer_args: "-L 150 -m 3 -x 2 -o 3 -e 1"
+    flexiplex_args: " -e 1 -x '' -b ???????????????? -u '' -x '' "
