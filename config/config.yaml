@@ -1,15 +1,15 @@
 # general
 threads: 36
-output_path: "/scratch/indikar_root/indikar1/shared_data/library_2_tsb_strict/"
+output_path: "/scratch/indikar_root/indikar1/shared_data/bone_marrow_tsb/"
 
 # input files
 inputs:
-    fastq_file_paths: "config/fastq_paths.txt"
+    fastq_file_paths: "config/fastq_paths_bm.txt"
     inputs_are_directories: false
     gzipped: true
     barcode_translation: "/nfs/turbo/umms-indikar/shared/projects/cell_cycle/data/10x_barcode_lists/3M-3pgex-may-2023_translation.txt"
-    detected_barcodes: "/scratch/indikar_root/indikar1/shared_data/lib2_02262025/whitelist/detected_barcodes.txt"
-    hash_sequences: 'config/hash_sequences.fasta'
+    detected_barcodes: "config/barcodes.txt"
+    hash_sequences: 'config/hash_sequences_bm_hashtag.fasta'
 
 # biolengend hashing params
 hashing:

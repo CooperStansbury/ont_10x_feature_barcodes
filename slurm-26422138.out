@@ -1,0 +1,74 @@
+---------------------------------
+  Snakemake Workflow Settings
+---------------------------------
+Config File: 
+Number of Cores: 18
+---------------------------------
+Building DAG of jobs...
+Error: <stdin>: syntax error in line 3 near '2025'
+Building DAG of jobs...
+Error: <stdin>: syntax error in line 3 near '2025'
+Building DAG of jobs...
+IncompleteFilesException:
+The files below seem to be incomplete. If you are sure that certain files are not incomplete, mark them as complete with
+
+    snakemake --cleanup-metadata <filenames>
+
+To re-generate the files rerun your command with the --rerun-incomplete flag.
+Incomplete files:
+/scratch/indikar_root/indikar1/shared_data/bone_marrow_tsb/flexiplex/chunk_10_CD34pos_CD38neg_B0251_HTO_1.done
+/scratch/indikar_root/indikar1/shared_data/bone_marrow_tsb/flexiplex/chunk_10_CD34pos_CD38neg_B0251_HTO_1.fastq
+/scratch/indikar_root/indikar1/shared_data/bone_marrow_tsb/flexiplex/chunk_10_CD34pos_CD38neg_B0251_HTO_1_reads_barcodes.txt
+ 
+ ####################  EXECUTION DETAILS  #################### 
+2025-05-29 08:11:39 -  Pipeline started 
+ Base directory:  /home/cstansbu/git_repositories/ont_10x_feature_barcodes 
+ Config file path:  /home/cstansbu/git_repositories/ont_10x_feature_barcodes/config/config.yaml 
+ 
+ ####################  CONFIG DETAILS  #################### 
+{
+    "threads": 36,
+    "output_path": "/scratch/indikar_root/indikar1/shared_data/bone_marrow_tsb/",
+    "inputs": {
+        "fastq_file_paths": "config/fastq_paths_bm.txt",
+        "inputs_are_directories": false,
+        "gzipped": true,
+        "barcode_translation": "/nfs/turbo/umms-indikar/shared/projects/cell_cycle/data/10x_barcode_lists/3M-3pgex-may-2023_translation.txt",
+        "detected_barcodes": "config/barcodes.txt",
+        "hash_sequences": "config/hash_sequences_bm_hashtag.fasta"
+    },
+    "hashing": {
+        "expected_cells": 10000,
+        "min_length": 100,
+        "max_length": 250,
+        "nanoplexer_args": "-L 150 -m 3 -x 2 -o 3 -e 1",
+        "flexiplex_args": " -e 1 -x '' -b ???????????????? -u '' -x '' "
+    }
+}
+ 
+ ####################  INPUT FILES  #################### 
+ chunk_20 :  chunk_20.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_20.fastq.gz ) 
+ chunk_15 :  chunk_15.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_15.fastq.gz ) 
+ chunk_17 :  chunk_17.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_17.fastq.gz ) 
+ chunk_9 :  chunk_9.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_9.fastq.gz ) 
+ chunk_22 :  chunk_22.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_22.fastq.gz ) 
+ chunk_19 :  chunk_19.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_19.fastq.gz ) 
+ chunk_5 :  chunk_5.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_5.fastq.gz ) 
+ chunk_3 :  chunk_3.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_3.fastq.gz ) 
+ chunk_16 :  chunk_16.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_16.fastq.gz ) 
+ chunk_13 :  chunk_13.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_13.fastq.gz ) 
+ chunk_14 :  chunk_14.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_14.fastq.gz ) 
+ chunk_10 :  chunk_10.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_10.fastq.gz ) 
+ chunk_24 :  chunk_24.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_24.fastq.gz ) 
+ chunk_23 :  chunk_23.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_23.fastq.gz ) 
+ chunk_11 :  chunk_11.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_11.fastq.gz ) 
+ chunk_4 :  chunk_4.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_4.fastq.gz ) 
+ chunk_1 :  chunk_1.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_1.fastq.gz ) 
+ chunk_25 :  chunk_25.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_25.fastq.gz ) 
+ chunk_21 :  chunk_21.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_21.fastq.gz ) 
+ chunk_12 :  chunk_12.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_12.fastq.gz ) 
+ chunk_2 :  chunk_2.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_2.fastq.gz ) 
+ chunk_6 :  chunk_6.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_6.fastq.gz ) 
+ chunk_7 :  chunk_7.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_7.fastq.gz ) 
+ chunk_18 :  chunk_18.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_18.fastq.gz ) 
+ chunk_8 :  chunk_8.fastq.gz  ( /nfs/turbo/umms-indikar/shared/projects/bone_marrow/data/feature_barcodes/merged_tsb/chunk_8.fastq.gz ) 
