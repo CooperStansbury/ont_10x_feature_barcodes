@@ -1,6 +1,7 @@
 # general
 threads: 36
-output_path: "/scratch/indikar_root/indikar1/shared_data/bone_marrow_tsb/"
+# output_path: "/scratch/indikar_root/indikar1/shared_data/bone_marrow_tsb_hashes/"
+output_path: "/scratch/indikar_root/indikar1/shared_data/bone_marrow_tsb_features/"
 
 # input files
 inputs:
@@ -9,12 +10,13 @@ inputs:
     gzipped: true
     barcode_translation: "/nfs/turbo/umms-indikar/shared/projects/cell_cycle/data/10x_barcode_lists/3M-3pgex-may-2023_translation.txt"
     detected_barcodes: "config/barcodes.txt"
-    hash_sequences: 'config/hash_sequences_bm_hashtag.fasta'
+    # hash_sequences: 'config/hash_sequences_bm_hashes.fasta'
+    hash_sequences: 'config/hash_sequences_bm_features.fasta'
 
 # biolengend hashing params
 hashing:
     expected_cells: 10000
     min_length: 100
     max_length: 250
-    nanoplexer_args: "-L 150 -m 3 -x 2 -o 3 -e 1"
+    nanoplexer_args: "-L 150 -m 3 -x 2 -o 3 -e 1" # hashes
     flexiplex_args: " -e 1 -x '' -b ???????????????? -u '' -x '' "
